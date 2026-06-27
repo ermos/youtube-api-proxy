@@ -128,7 +128,9 @@ func (h *Handler) parseMaxResults(value string) int {
 func (h *Handler) writeJSON(w http.ResponseWriter, status int, data interface{}) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
-	json.NewEncoder(w).Encode(data)
+	if err := json.NewEncoder(w).Encode(data); err != nil {
+		log.Printf("write response error: %v", err)
+	}
 }
 
 func (h *Handler) writeError(w http.ResponseWriter, status int, message string) {
