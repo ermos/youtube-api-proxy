@@ -20,6 +20,13 @@ import (
 	"youtube-api/internal/youtube"
 )
 
+func maskKey(k string) string {
+	if len(k) < 2 {
+		return "not set"
+	}
+	return k[:2] + "******"
+}
+
 func main() {
 	_ = dotenv.Parse("./.env")
 
@@ -29,6 +36,7 @@ func main() {
 	}
 
 	log.Printf("allowed channels: %v", cfg.YouTubeAllowedChannels)
+	log.Printf("youtube api key loaded: %s", maskKey(cfg.YouTubeAPIKey))
 
 	memCache := cache.New(cfg.CacheTTLSeconds)
 
