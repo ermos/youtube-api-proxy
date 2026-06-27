@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"net/url"
 	"time"
@@ -131,7 +132,8 @@ func (s *Service) GetLatestVideos(ctx context.Context, channelID string, maxResu
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("youtube api returned status %d", resp.StatusCode)
+		body, _ := io.ReadAll(resp.Body)
+		return nil, fmt.Errorf("youtube api returned status %d: %s", resp.StatusCode, body)
 	}
 
 	var searchResp searchResponse
@@ -188,7 +190,8 @@ func (s *Service) GetLatestPlaylists(ctx context.Context, channelID string, maxR
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("youtube api returned status %d", resp.StatusCode)
+		body, _ := io.ReadAll(resp.Body)
+		return nil, fmt.Errorf("youtube api returned status %d: %s", resp.StatusCode, body)
 	}
 
 	var playlistsResp playlistsResponse
