@@ -19,6 +19,10 @@ ENV PORT=$PORT
 
 COPY --from=builder /build/http /http
 
+# Run as a non-root user (Trivy DS-0002).
+RUN adduser -D -u 10001 app
+USER app
+
 EXPOSE $PORT
 
 ENTRYPOINT ["/http"]

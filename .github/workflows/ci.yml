@@ -1,10 +1,11 @@
 name: CI
 
+# push only on main; everything else is covered by the PR event,
+# so branches with an open PR don't run every job twice.
 on:
   push:
-    branches-ignore: [main]
-  pull_request:
     branches: [main]
+  pull_request:
 
 permissions:
   contents: read
@@ -30,7 +31,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
-          go-version: stable
+          # golangci-lint trails the newest Go release; pin to a version it supports.
+          go-version: "1.24"
           cache: true
       - uses: golangci/golangci-lint-action@v6
         with:
@@ -46,6 +48,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
+          # newest Go so stdlib CVEs are already patched in the scanned toolchain.
           go-version: stable
           cache: true
 
