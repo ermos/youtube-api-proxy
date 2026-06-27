@@ -1,0 +1,71 @@
+name: CI
+
+# push only on main; everything else is covered by the PR event,
+# so branches with an open PR don't run every job twice.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: 🧪 Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+          cache: true
+      - run: go vet ./...
+      - run: go test -race -coverprofile=coverage.out ./...
+      - run: go tool cover -func=coverage.out
+
+  lint:
+    name: 🎯 Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          # golangci-lint trails the newest Go release; pin to a version it supports.
+          go-version: "1.24"
+          cache: true
+      - uses: golangci/golangci-lint-action@v6
+        with:
+          version: latest
+
+  security:
+    name: 🔒 Security
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          # newest Go so stdlib CVEs are already patched in the scanned toolchain.
+          go-version: stable
+          cache: true
+
+      - name: govulncheck (known CVEs in deps)
+        run: |
+          go install golang.org/x/vuln/cmd/govulncheck@latest
+          govulncheck ./...
+
+      - name: gosec (static analysis)
+        uses: securego/gosec@master
+        with:
+          args: ./...
+
+      - name: Trivy (filesystem & secrets scan)
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: fs
+          scanners: vuln,secret,misconfig
+          severity: HIGH,CRITICAL
+          exit-code: "1"

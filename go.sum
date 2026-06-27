@@ -1,0 +1,6 @@
+github.com/ermos/dotenv v1.2.1 h1:wKZwf8LISmJ3xH1GU3xEUkkn1HfZVuTMbYkjY08tVYc=
+github.com/ermos/dotenv v1.2.1/go.mod h1:b7EsiNzP2biDcTxKM11wKz2PwQdn3kwBQ9lB5kh2u5s=
+github.com/go-chi/chi/v5 v5.2.3 h1:WQIt9uxdsAbgIYgid+BpYc+liqQZGMHRaUwp0JUcvdE=
+github.com/go-chi/chi/v5 v5.2.3/go.mod h1:L2yAIGWB3H+phAw1NxKwWM+7eUH/lU8pOMm5hHcoops=
+github.com/go-chi/cors v1.2.2 h1:Jmey33TE+b+rB7fT8MUy1u0I4L+NARQlK6LhzKPSyQE=
+github.com/go-chi/cors v1.2.2/go.mod h1:sSbTewc+6wYHBBCW7ytsFSn836hqM7JxpglAy2Vzc58=
