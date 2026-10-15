@@ -31,7 +31,7 @@ jobs:
 
       - name: Log in to GHCR
         if: steps.tag.outputs.new_tag
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
