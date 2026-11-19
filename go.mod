@@ -2,7 +2,7 @@ module youtube-api
 
 go 1.24
 
-toolchain go1.26.11
+toolchain go1.27.4
 
 require (
 	github.com/ermos/dotenv v1.2.1
